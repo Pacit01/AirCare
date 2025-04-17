@@ -115,20 +115,24 @@ function handleDataUpdate(data) {
   }
   
   log('Datos de sensores recibidos', data);
-  appState.rawData = data;
+  // **¡CAMBIO IMPORTANTE AQUÍ!**
+  // En lugar de REEMPLAZAR appState.rawData = data;
+  // COMBINAMOS los nuevos datos con los datos existentes:
+  appState.rawData = { ...appState.rawData, ...data }; // Usamos el operador spread (...) para combinar objetos
+
   updateDebugInfo();
   
-  // Actualizar valores en la UI
-  updateSensorValue('temperature-value', data.temperature);
-  updateSensorValue('humidity-value', data.humidity);
-  updateSensorValue('co2-value', data.co2);
-  updateSensorValue('pm1-value', data.pm1);
-  updateSensorValue('pm2_5-value', data.pm2_5);
-  updateSensorValue('pm4-value', data.pm4);
-  updateSensorValue('pm10-value', data.pm10);
-  updateSensorValue('tvoc-value', data.tvoc);
-  updateSensorValue('filtro-value', data.filtro_command);
-  updateSensorValue('ventilator-value', data.ventilator_command);
+  // Actualizar valores en la UI (esto sigue igual)
+  updateSensorValue('temperature-value', appState.rawData.temperature); // Ahora usamos appState.rawData
+  updateSensorValue('humidity-value', appState.rawData.humidity);      // ... y así con todos los sensores
+  updateSensorValue('co2-value', appState.rawData.co2);
+  updateSensorValue('pm1-value', appState.rawData.pm1);
+  updateSensorValue('pm2_5-value', appState.rawData.pm2_5);
+  updateSensorValue('pm4-value', appState.rawData.pm4);
+  updateSensorValue('pm10-value', appState.rawData.pm10);
+  updateSensorValue('tvoc-value', appState.rawData.tvoc);
+  updateSensorValue('filtro-value', appState.rawData.filtro_command);
+  updateSensorValue('ventilator-value', appState.rawData.ventilator_command);
 
   
   // Mostrar que estamos conectados
